@@ -49,8 +49,6 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
 ## Setup Details
 - **Hardhat**: v2.24.0
 - **Westend RPC**: `https://westend-asset-hub-eth-rpc.polkadot.io`
-- **Solidity**: v0.8.28
-- **Deployer**: `0x93eC5e12AC770eF01920dF0D870b5A075937b55b`
 
 - Deployed `MyToken` ERC-20 as a stepping stone.
 
