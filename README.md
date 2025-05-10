@@ -43,9 +43,8 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
   - Transferred 1000 KSM and 1000 USDT to Pair.
   - Minted ~999 LP tokens to `0x93eC5e12AC770eF01920dF0D870b5A075937b55b`.
   - Reserves: ~1000 KSM, ~1000 USDT.
-- [Optional Swap]:
   - Sent 10 KSM to Pair, received ~9.9 USDT.
-- [Screenshots in `screenshots/`]
+
 
 ## Setup Details
 - **Hardhat**: v2.24.0
@@ -53,18 +52,9 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
 - **Solidity**: v0.8.28
 - **Deployer**: `0x93eC5e12AC770eF01920dF0D870b5A075937b55b`
 
-## Challenges Overcome
-- Resolved PolkaVM’s 49152-byte initcode limit.
-- Fixed compiler mismatch (`0.8.26` to `0.8.28`).
-- Corrected `@nomiclabs/hardhat-ignition` to `@nomicfoundation/hardhat-ignition-ethers`.
-- Resolved deployer address mismatch and artifact not found errors.
-- Fixed TypeScript `hre.ethers.utils` error for `parseEther`.
-
-## Previous Version
-- [KusamaSwap v1](https://github.com/your-username/kusamaswap-remix): Deployed via Remix.
 - Deployed `MyToken` ERC-20 as a stepping stone.
 
 ## Future Improvements
-- Add `swap` and `burn` if initcode allows.
+- Add `burn` if initcode allows.
 - Integrate Mocha/Chai tests.
 - Compare PolkaVM performance with other EVM chains.
