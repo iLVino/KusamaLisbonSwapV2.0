@@ -8,8 +8,6 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
 - **Original Source**: Uniswap V2 Pair
 - **Deployed on**: Westend Testnet
 - **Contracts**: `UniswapV2Pair.sol` (minimal, `mint` and `swap`), `MockERC20.sol` (KSM/USDT)
-- **Based on**: [hardhat-polkadot-example](https://github.com/polkadot-developers/hardhat-polkadot-example)
-- **Hackathon Idea**: [Issue #19](https://github.com/polkadot-developers/hackathon-guide/issues/19)
 
 ## Setup
 1. Clone the repo: `git clone https://github.com/iLVino/KusamaLisbonSwapV2.0`
