@@ -22,6 +22,7 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
    - USDT: `npx hardhat ignition deploy ./ignition/modules/USDTModule.ts --network westendAssetHub`
    - Pair: `npx hardhat ignition deploy ./ignition/modules/PairModule.ts --network westendAssetHub`
 6. Test: `npx hardhat run scripts/test-mint.ts --network westendAssetHub`
+         `npx hardhat run scripts/test-swap.ts --network westendAssetHub`
 
 ## Deployed Contracts
 - KSM: `0x4FB451440e632eB25B0bBc5e40DF0aE88CCd33fd` 
