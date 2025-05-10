@@ -24,6 +24,9 @@ const App: React.FC = () => {
   const [account, setAccount] = useState<string | null>(null);
   const [ksmAmount, setKsmAmount] = useState<string>('1000');
   const [usdtAmount, setUsdtAmount] = useState<string>('1000');
+  const [swapAmount, setSwapAmount] = useState<string>('100');
+  const [swapToken, setSwapToken] = useState<string>('KSM'); // KSM or USDT
+  const [expectedOutput, setExpectedOutput] = useState<string>('0');
   const [reserves, setReserves] = useState<{ reserve0: string; reserve1: string }>({ reserve0: '0', reserve1: '0' });
   const [lpBalance, setLpBalance] = useState<string>('0');
   const [status, setStatus] = useState<string>('');
@@ -121,7 +124,31 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Load reserves and LP balance
+  // Calculate expected swap output
+  const calculateSwapOutput = useCallback(async () => {
+    if (provider && swapAmount && parseFloat(swapAmount) > 0) {
+      try {
+        const pairContract = new ethers.Contract(PAIR_ADDRESS, UniswapV2PairABI.abi, provider);
+        const [reserve0, reserve1] = await pairContract.getReserves();
+        const reserveIn = swapToken === 'KSM' ? reserve0 : reserve1;
+        const reserveOut = swapToken === 'KSM' ? reserve1 : reserve0;
+
+        const amountIn = ethers.utils.parseEther(swapAmount);
+        const amountInWithFee = amountIn.mul(997); // 0.3% fee
+        const numerator = amountInWithFee.mul(reserveOut);
+        const denominator = reserveIn.mul(1000).add(amountInWithFee);
+        const amountOut = numerator.div(denominator);
+
+        setExpectedOutput(ethers.utils.formatEther(amountOut));
+      } catch (error) {
+        setStatus('Error calculating swap output: ' + (error as Error).message);
+      }
+    } else {
+      setExpectedOutput('0');
+    }
+  }, [provider, swapAmount, swapToken]);
+
+  // Load reserves, LP balance, and swap output
   const loadData = useCallback(async () => {
     if (provider && signer && account) {
       try {
@@ -133,11 +160,12 @@ const App: React.FC = () => {
           reserve1: ethers.utils.formatEther(reserve1),
         });
         setLpBalance(ethers.utils.formatEther(lpBalance));
+        await calculateSwapOutput();
       } catch (error) {
         setStatus('Error loading data: ' + (error as Error).message);
       }
     }
-  }, [provider, signer, account]);
+  }, [provider, signer, account, calculateSwapOutput]);
 
   // Add liquidity
   const addLiquidity = async () => {
@@ -177,6 +205,61 @@ const App: React.FC = () => {
     }
   };
 
+  // Swap tokens
+  const swapTokens = async () => {
+    if (!provider || !signer || !account) {
+      setStatus('Please connect wallet first!');
+      return;
+    }
+
+    if (parseFloat(swapAmount) <= 0) {
+      setStatus('Please enter a valid swap amount.');
+      return;
+    }
+
+    setStatus('Processing swap...');
+    try {
+      const inputToken = swapToken === 'KSM' ? KSM_ADDRESS : USDT_ADDRESS;
+      const tokenContract = new ethers.Contract(inputToken, MockERC20ABI.abi, signer);
+      const pairContract = new ethers.Contract(PAIR_ADDRESS, UniswapV2PairABI.abi, signer);
+
+      const amountIn = ethers.utils.parseEther(swapAmount);
+      const [reserve0, reserve1] = await pairContract.getReserves();
+      const reserveIn = swapToken === 'KSM' ? reserve0 : reserve1;
+      const reserveOut = swapToken === 'KSM' ? reserve1 : reserve0;
+
+      // Calculate amount out with 0.3% fee
+      const amountInWithFee = amountIn.mul(997);
+      const numerator = amountInWithFee.mul(reserveOut);
+      const denominator = reserveIn.mul(1000).add(amountInWithFee);
+      const amountOut = numerator.div(denominator);
+
+      // Approve input token
+      await (await tokenContract.approve(PAIR_ADDRESS, amountIn)).wait();
+      setStatus(`${swapToken} approved`);
+
+      // Transfer input token to pair
+      await (await tokenContract.transfer(PAIR_ADDRESS, amountIn)).wait();
+      setStatus(`${swapToken} transferred`);
+
+      // Execute swap
+      const amount0Out = swapToken === 'KSM' ? 0 : amountOut;
+      const amount1Out = swapToken === 'KSM' ? amountOut : 0;
+      await (await pairContract.swap(amount0Out, amount1Out, account, [])).wait();
+      setStatus('Swap completed successfully!');
+
+      // Reload data
+      await loadData();
+    } catch (error) {
+      setStatus('Error swapping tokens: ' + (error as Error).message);
+    }
+  };
+
+  // Recalculate swap output when inputs change
+  useEffect(() => {
+    calculateSwapOutput();
+  }, [swapAmount, swapToken, calculateSwapOutput]);
+
   // Load data on account change
   useEffect(() => {
     loadData();
@@ -215,6 +298,41 @@ const App: React.FC = () => {
         </div>
         <button className="btn btn-success" onClick={addLiquidity}>
           Add Liquidity
+        </button>
+      </div>
+      <div className="card p-3 mb-3">
+        <h3>Swap Tokens</h3>
+        <div className="mb-3">
+          <label>Input Token:</label>
+          <select
+            className="form-control"
+            value={swapToken}
+            onChange={(e) => setSwapToken(e.target.value)}
+          >
+            <option value="KSM">KSM</option>
+            <option value="USDT">USDT</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label>Amount:</label>
+          <input
+            type="number"
+            className="form-control"
+            value={swapAmount}
+            onChange={(e) => setSwapAmount(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Expected Output ({swapToken === 'KSM' ? 'USDT' : 'KSM'}):</label>
+          <input
+            type="text"
+            className="form-control"
+            value={expectedOutput}
+            readOnly
+          />
+        </div>
+        <button className="btn btn-primary" onClick={swapTokens}>
+          Swap
         </button>
       </div>
       <div className="card p-3">
