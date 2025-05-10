@@ -1,0 +1,76 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/stillo/KusamaLisbonSwapV2/contracts/MockERC20.sol": {
+      "lastModificationDate": 1746890080027,
+      "contentHash": "ccf6873667d4f5a399c4986ad5548c40",
+      "sourceName": "contracts/MockERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "parameters": "z"
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "MockERC20"
+      ]
+    },
+    "/Users/stillo/KusamaLisbonSwapV2/contracts/UniswapV2Pair.sol": {
+      "lastModificationDate": 1746889657250,
+      "contentHash": "c3bf226953bc1280188efd169957fa26",
+      "sourceName": "contracts/UniswapV2Pair.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "parameters": "z"
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "IERC20",
+        "UniswapV2Pair"
+      ]
+    }
+  }
+}
