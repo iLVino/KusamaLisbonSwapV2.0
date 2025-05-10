@@ -3,7 +3,7 @@
 A Uniswap V2-style AMM DEX ported to Westend on PolkaVM for the Polkadot Hackathon, built with Hardhat.
 
 ## Overview
-KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KSM/USDT liquidity addition [and token swaps]. It uses Solidity 0.8.28 with Hardhat, meeting PolkaVM’s 49152-byte initcode limit.
+KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KSM/USDT liquidity addition and token swaps. It uses Solidity 0.8.28 with Hardhat.
 
 - **Track**: Porting Existing Smart Contracts
 - **Original Source**: [Uniswap V2 Pair](https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Pair.sol)
@@ -24,19 +24,18 @@ KusamaSwap v2 ports a minimal Uniswap V2 Pair contract to Westend, supporting KS
 6. Test: `npx hardhat run scripts/test-mint.ts --network westendAssetHub`
 
 ## Deployed Contracts
-- KSM: `0xKSMAddress` (replace with actual address)
-- USDT: `0xUSDTAddress`
-- Pair: `0xPairAddress`
-- [Previous] MyToken: `0xMyTokenAddress`
+- KSM: `0x4FB451440e632eB25B0bBc5e40DF0aE88CCd33fd` 
+- USDT: `0x369c6E27533c5bC20277a24aB32C43358EE949A3`
+- Pair: `0x935E7f86531335c02A458253f220F7D412172D2D`
 
 ## Gas Cost Comparison
 | Action         | PolkaVM (Westend) Gas | Ethereum Gas | Notes                     |
 |----------------|-----------------------|--------------|---------------------------|
-| Deploy KSM     | [FILL]                | ~600k        | MockERC20 deployment      |
-| Deploy USDT    | [FILL]                | ~600k        | MockERC20 deployment      |
-| Deploy Pair    | [FILL]                | ~1.2M        | PolkaVM initcode limits   |
-| Add Liquidity  | [FILL]                | ~200k        | `mint` call               |
-| Swap (Optional)| [FILL]                | ~80k         | No fee for MVP            |
+| Deploy KSM     | 316638451715000       | ~600k        | MockERC20 deployment      |
+| Deploy USDT    | 316638451715000       | ~600k        | MockERC20 deployment      |
+| Deploy Pair    | 306916585041666       | ~1.2M        | PolkaVM initcode limits   |
+| Add Liquidity  | 31093251728333        | ~200k        | `mint` call               |
+| Swap           | 44885218385000        | ~80k         | No fee for MVP            |
 
 ## Test Logs
 - **Liquidity Addition**:
